@@ -1,0 +1,91 @@
+###############
+## Variables ##
+###############
+
+# Root directory of where all your Repos were cloned.
+dotfiles_path="~/.dotfiles"
+repos_root="~/Repos"
+personal_repos="$repos_root/personal"
+external_repos="$repos_root/external"
+
+##############
+## Commands ##
+##############
+
+# NixOS Rebuild - You will use this often
+alias rebuild="$dotfiles_path/nixos/rebuild-nixos.sh"
+
+# Other potentially useful aliases
+alias aa="git add -pA" # Add all changes interactively
+alias tt="code ." # Open current directory in your editor
+alias git_nuke_merged="git branch --merged | egrep -v \"(^\*|main|master)\" | xargs git branch -d"
+alias git_sync_main="git co main && git pull upstream main && git push && git fetch --all --prune && git_nuke_merged"
+alias git_sync_master="git co master && git pull upstream master && git push && git fetch --all --prune && git_nuke_merged"
+alias sync_obsidian="git fetch --all --prune && git add -A && git commit -m \"Sync Obsidian with Git\" && git pull --rebase -X theirs"
+
+#####################
+## Command Aliases ##
+#####################
+
+alias youtube-dl="yt-dlp"
+alias open="xdg-open"
+alias cat="bat --plain --paging=never"
+alias less="bat --paging=always"
+alias top="btop"
+
+################
+## CD Aliases ##
+################
+
+# Root
+alias repos="cd $repos_root"
+alias dotfiles="cd $dotfiles_path"
+# Personal
+alias personal="cd $personal_repos"
+alias homelab="cd $personal_repos/homelab" # Example of a personal repo
+# External
+alias external="cd $external_repos"
+alias nixpkgs="cd $external_repos/nixpkgs" # Example of an external repo
+
+######################
+## Helper Functions ##
+######################
+
+git_pr() {
+  if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] ; then
+    echo "Missing required arguments:"
+    echo "1 - origin/upstream (remote where PR exists, not the fork)"
+    echo "2 - pull request ID (e.g. '42' without quotation)"
+    echo "3 - local branch to fetch onto (must not already exist)"
+  else
+    if git fetch $1 pull/$2/head:$3 ; then
+      git checkout $3
+    else
+      echo "Failed to fetch pull request $2"
+    fi
+  fi
+}
+
+git_fancy_diff() {
+  if [ -z "$1" ] ; then
+    echo "Missing required arguments:"
+    echo "1 - <file>"
+  else
+    fullpath=$1
+    directory=$(dirname "$fullpath")
+    file=$(basename "$fullpath")
+    extension="${file#*.}"
+    filename="${file%%.*}"
+    echo "Creating reference files using:" $fullpath
+    echo "Common:" $directory/$filename.common.$extension
+    git show :1:$fullpath > $directory/$filename.common.$extension
+    echo "Ours:  " $directory/$filename.ours.$extension
+    git show :2:$fullpath > $directory/$filename.ours.$extension
+    echo "Theirs:" $directory/$filename.theirs.$extension
+    git show :3:$fullpath > $directory/$filename.theirs.$extension
+  fi
+}
+
+fail_this() {
+  while "$@"; do :; done
+}

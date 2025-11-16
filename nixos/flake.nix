@@ -44,6 +44,7 @@
     hosts = [
       { hostname = "example-desktop"; }
       { hostname = "example-laptop"; }
+      { hostname = "example-mini-pc"; }
     ];
   in
   {

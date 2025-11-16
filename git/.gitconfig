@@ -1,0 +1,43 @@
+[user]
+  name = "Alice Example"
+  email = alice@example.com
+  # signingKey = Your Signing Key Here
+[color]
+  ui = true
+[core]
+  editor = code --wait
+  autocrlf = input
+  pager = less -x1,3
+  precomposeunicode = false
+  excludesfile = ~/.gitignore
+[push]
+  default = simple
+[pull]
+  ff = only
+[alias]
+  hist = log --color --graph --pretty=format:'%Cred%h%C(cyan) %G?%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  co = checkout
+  update = pull --rebase
+  undo-commit = reset --soft @~1
+  ignore-file = update-index --assume-unchanged
+  unignore-file = update-index --no-assume-unchanged
+  ci = commit
+  amend = commit --amend
+  jedi = push --force-with-lease
+  stats = diff --shortstat
+  filehist = log -p --
+  st = status
+  br = branch
+  df = diff
+  dif = diff
+  fh = filehist
+[auto]
+  safecrlf = true
+# [commit]
+#   gpgSign = true
+[tag]
+  sort = -taggerdate
+[init]
+  defaultBranch = main
+# [gpg "ssh"]
+#   allowedSignersFile = ~/.config/git/allowed_signers
