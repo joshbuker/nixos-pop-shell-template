@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Enable the X11 windowing system
@@ -33,13 +33,5 @@
   # Workaround for NixOS/nixpkgs#92265
   services.xserver.desktopManager.gnome.sessionPath = [
     pkgs.gnomeExtensions.pop-shell
-  ];
-
-  # Workaround for NixOS/nixpkgs#195936
-  environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-    pkgs.gst_all_1.gst-plugins-good
-    pkgs.gst_all_1.gst-plugins-bad
-    pkgs.gst_all_1.gst-plugins-ugly
-    pkgs.gst_all_1.gst-plugins-libav
   ];
 }
